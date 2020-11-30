@@ -8,8 +8,8 @@ all:
 
 .PHONY: docker
 docker:
-	docker build -f docker/Dockerfile -t stealthdb:1.0 docker/
-	docker run -it -d --rm --device=/dev/isgx --volume=/var/run/aesmd/aesm.socket:/var/run/aesmd/aesm.socket -p 5432:5432 --name sdb stealthdb:1.0
+	docker build -f docker/Dockerfile -t stealthdb:1.0 .
+	docker run -it -d -e POSTGRES_PASSWORD=test123 --device=/dev/isgx --volume=/var/run/aesmd/aesm.socket:/var/run/aesmd/aesm.socket -p 5432:5432 --name sdb stealthdb:1.0
 
 .PHONY: install
 install:

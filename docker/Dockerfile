@@ -1,4 +1,4 @@
-FROM postgres:latest
+FROM postgres:9.6
 
 RUN apt-get update  \
  && apt-get install --yes \
@@ -19,11 +19,13 @@ RUN apt-get update  \
         postgresql-server-dev-all \
  && rm -rf /var/lib/apt/lists/*
 
-COPY sgx-deps.mk /opt/Makefile
+COPY docker/sgx-deps.mk /opt/Makefile
 WORKDIR /opt
 RUN make
 
-RUN git clone https://github.com/cryptograph/stealthdb /home/stealthDB
+RUN ln -s /opt/intel/sgxsdk/lib64/libsgx_urts.so /lib/libsgx_urts.so && ln -s /opt/intel/sgxsdk/lib64/libsgx_uae_service.so /lib/libsgx_uae_service.so
+
+COPY . /home/stealthDB
 
 WORKDIR /home/stealthDB
 RUN make && make install

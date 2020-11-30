@@ -3,9 +3,9 @@ include vars.mk
 UNTRUSTED_DIR=untrusted
 INTERFACE_DIR=untrusted/interface
 EXTENSION_DIR=untrusted/extensions
-PSQL_PKG_LIBDIR = $(shell pg_config --pkglibdir)
-PSQL_SHAREDIR = $(shell pg_config --sharedir)/extension
-PSQL_LIBDIR = $(shell pg_config --libdir)
+PSQL_PKG_LIBDIR = /usr/lib/postgresql/9.6/lib
+PSQL_SHAREDIR = /usr/share/postgresql/9.6/extension
+PSQL_LIBDIR = /usr/lib/x86_64-linux-gnu
 
 EXTENSION = $(EXTENSION_DIR)/encdb        # the extension's name
 DATA = $(EXTENSION_DIR)/encdb--0.0.1.sql  # scripts to install
@@ -16,7 +16,7 @@ C_OBJS := $(C_SRCS:.c=.o)
 CXX_SRCS := $(wildcard tools/*.cpp) $(wildcard $(INTERFACE_DIR)/*.cpp)
 CXX_OBJS := $(CXX_SRCS:.cpp=.o)
 
-PSQL_CPPFLAGS := $(addprefix -I, $(CURDIR) $(shell pg_config --includedir-server) $(shell pg_config --includedir))
+PSQL_CPPFLAGS := $(addprefix -I, $(CURDIR) /usr/include/postgresql/9.6/server /usr/include/postgresql)
 
 CPPFLAGS := -DTOKEN_FILENAME=\"$(STEALTHDIR)/$(ENCLAVE_NAME).token\" \
 			-DENCLAVE_FILENAME=\"$(STEALTHDIR)/$(ENCLAVE_NAME).signed.so\" \
@@ -26,7 +26,7 @@ CPPFLAGS := -DTOKEN_FILENAME=\"$(STEALTHDIR)/$(ENCLAVE_NAME).token\" \
 FLAGS := -m64 -O0 -g -fPIC -Wall -Wextra -Wpedantic
 CFLAGS := $(FLAGS) $(CPPFLAGS)
 CXXFLAGS := $(FLAGS) $(CPPFLAGS) -std=c++11
-LDFLAGS := -lsgx_urts -lpthread
+LDFLAGS := -L /opt/intel/sgxsdk/lib64 -lsgx_urts -lpthread
 
 .PHONY: all
 all: $(UNTRUSTED_DIR)/encdb.so

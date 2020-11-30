@@ -68,7 +68,7 @@ Timestamp pg_timestamp_in(char* str)
         TIMESTAMP_NOBEGIN(result);
         break;
 
-    case DTK_INVALID:
+/*    case DTK_INVALID:
         ereport(ERROR,
                 (errcode(ERRCODE_FEATURE_NOT_SUPPORTED),
                  errmsg("date/time value \"%s\" is no longer supported", str)));
@@ -76,6 +76,7 @@ Timestamp pg_timestamp_in(char* str)
         TIMESTAMP_NOEND(result);
         break;
 
+*/
     default:
         elog(ERROR, "unexpected dtype %d while parsing timestamp \"%s\"",
              dtype, str);
